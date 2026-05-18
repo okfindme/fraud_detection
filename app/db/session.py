@@ -1,9 +1,26 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+# app/db/session.py
+# now async session
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from app.core.config import settings
 
-engine = create_engine("sqlite:///./dev.db")
+DATABASE_URL = settings.DATABASE_URL
 
-SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind = engine)
+engine = create_async_engine(DATABASE_URL, echo=True)
+
+AsyncSessionLocal = async_sessionmaker(
+    engine,
+    expire_on_commit=False,
+)
+
+
+
+#synch session 
+#from sqlalchemy import create_engine
+#from sqlalchemy.orm import sessionmaker
+
+#engine = create_engine("sqlite:///./dev.db")
+
+#SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind = engine)
 
 # we dont call session here as session will be created even if we import it and cause the dataleaking...
 

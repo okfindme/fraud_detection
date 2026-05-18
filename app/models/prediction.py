@@ -16,7 +16,7 @@ class Prediction (Base):
     fraud_score : Mapped[float] = mapped_column(Float , nullable= False)
     is_fraud : Mapped[bool] = mapped_column(Boolean , nullable=False)
     model_version : Mapped[str] = mapped_column(String(50), default="v1.0")
-    created_at : Mapped[datetime] = mapped_column(DateTime , default=lambda :datetime.now(timezone.utc))
+    created_at : Mapped[datetime] = mapped_column(DateTime(timezone=True) , default=lambda :datetime.now(timezone.utc))
 
     # establishes the relationship between Predictions table and user table
     # establishes the relationship between Predictions table and AuditLog table

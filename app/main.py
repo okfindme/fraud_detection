@@ -1,3 +1,24 @@
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+import subprocess
+from app.api.routes.users import router as users_router
+from app.api.routes.predictions import router as predictions_router
+from app.api.routes.api_keys import router as api_keys_router
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    subprocess.run(["alembic", "upgrade", "head"], check=True)
+    yield
+
+app = FastAPI(lifespan=lifespan)
+
+app.include_router(users_router)
+app.include_router(predictions_router)
+app.include_router(api_keys_router)
+
+
+"""
+--> this was the sync code 
+
 from app.db.base import Base
 from app.db.session import SessionLocal , engine
 from app.models.user import User
@@ -5,7 +26,9 @@ from app.models.prediction import Prediction
 from app.models.audit_log import AuditLog
 from app.models.api_key import ApiKey
 
-Base.metadata.create_all(engine)
+#now this is done by the alembic , it manages the creation and sync it 
+# This line is now not just redundant — it's dangerous. If it runs before a migration, it can create tables outside Alembic's tracking, causing the exact silent-empty-migration problem we discussed at the start.
+#Base.metadata.create_all(engine)
 
 session = SessionLocal()
 
@@ -32,4 +55,4 @@ try:
 
     
 finally:
-    session.close()
+    session.close()"""

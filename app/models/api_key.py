@@ -12,8 +12,8 @@ class ApiKey(Base):
     key_hash :Mapped[str] = mapped_column(String(255) , nullable=False )
     name : Mapped[str]  = mapped_column(String(100) , nullable= False )
     is_active : Mapped[bool] = mapped_column(Boolean , default=True)
-    expires_at : Mapped[Optional[datetime]] = mapped_column(DateTime , nullable=True )
-    created_at : Mapped[datetime] = mapped_column(DateTime , default= lambda : datetime.now(timezone.utc))
+    expires_at : Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True) , nullable=True )
+    created_at : Mapped[datetime] = mapped_column(DateTime(timezone=True) , default= lambda : datetime.now(timezone.utc))
 
     # establishes the relationship between apikey table and user table
     owner :Mapped["User"] = relationship("User" , back_populates="api_keys")

@@ -12,8 +12,8 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(255) , unique= True , nullable= False)
     full_name: Mapped[Optional[str]] = mapped_column(String(50),nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean , default= True)
-    created_at: Mapped[datetime] = mapped_column(DateTime , default=lambda: datetime.now(timezone.utc))
-
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True) , default=lambda: datetime.now(timezone.utc))
+    last_login: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
     # predictions and apikey classes are now connected with userclass ( two way connection )
     predictions : Mapped[list["Prediction"]] = relationship("Prediction", back_populates="owner")
     api_keys : Mapped[list["ApiKey"]] = relationship("ApiKey" , back_populates="owner")

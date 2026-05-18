@@ -1,3 +1,5 @@
+"""
+
 from sqlalchemy import create_engine, String, Integer, ForeignKey 
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
 
@@ -37,3 +39,49 @@ with Session(engine) as session :
     print(book.library.name)
     library = session.get(Library , 1 )
     print(library.books)
+    
+"""
+
+"""
+# learning to setup the fast api routes with validation and orm model enabled
+from pydantic import BaseModel, ConfigDict
+from fastapi import APIRouter , Depends
+
+app = APIRouter(prefix="/products")
+
+
+class ProductCreate(BaseModel):
+    name: str
+    price: float
+class ProductResponse(BaseModel):
+    id: int
+    name: str
+    price: float
+    model_config = ConfigDict(from_attributes=True)
+
+def get_db():
+    yield {"connection":"fake"}
+
+@app.post('/',response_model=ProductResponse)
+async def create_product(product : ProductCreate , db = Depends(get_db)):
+    return {"id" : 1 ,"name":product.name , "price":product.price}
+    
+"""
+
+"""
+from pydantic_settings import SettingsConfigDict , BaseSettings
+
+
+
+class Setting(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env")
+    APP_NAME : str
+    DEBUG : bool = False
+
+
+setting = Setting() # this is module level 
+
+print(setting.APP_NAME , setting.DEBUG)
+
+
+"""
