@@ -8,7 +8,7 @@ from typing import Optional
 class AuditLog(Base):
     # name of the table
     __tablename__ = "audit_logs"
-
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     id : Mapped[int] = mapped_column(Integer ,primary_key=True)
     prediction_id : Mapped[int] = mapped_column(ForeignKey("predictions.id"))
     ip_address:Mapped[str] = mapped_column(String(50)) 

@@ -1,10 +1,15 @@
 from pydantic_settings import BaseSettings , SettingsConfigDict
-
+import os
+env = os.getenv("APP_ENV", "dev")
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=f".env.{env}")
 
     DATABASE_URL: str
     APP_ENV: str = "dev"
+    DEBUG: bool = False
+    LOG_LEVEL: str = "INFO"
+    RATE_LIMIT: str = "10/minute"
+    ALLOWED_ORIGINS: list[str] = ["*"]
 
 
 # Instantiated once at module level — .env is read once,
